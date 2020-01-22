@@ -1,6 +1,6 @@
 /*-
  * Copyright 2009 Colin Percival
- * Copyright 2012-2019 Alexander Peslyak
+ * Copyright 2012-2018 Alexander Peslyak
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,10 +46,9 @@
 /*
  * AVX and especially XOP speed up Salsa20 a lot, but needlessly result in
  * extra instruction prefixes for pwxform (which we make more use of).  While
- * no slowdown from the prefixes is generally observed on AMD LITBs supporting
- * XOP, some slowdown is sometimes observed on Intel LITBs with AVX.
+ * no slowdown from the prefixes is generally observed on AMD CPUs supporting
+ * XOP, some slowdown is sometimes observed on Intel CPUs with AVX.
  */
-/*
 #ifdef __XOP__
 #warning "Note: XOP is enabled.  That's great."
 #elif defined(__AVX__)
@@ -61,13 +60,12 @@
 #else
 #warning "Note: building generic code for non-x86.  That's OK."
 #endif
-*/
 
 /*
  * The SSE4 code version has fewer instructions than the generic SSE2 version,
  * but all of the instructions are SIMD, thereby wasting the scalar execution
  * units.  Thus, the generic SSE2 version below actually runs faster on some
- * LITBs due to its balanced mix of SIMD and scalar instructions.
+ * CPUs due to its balanced mix of SIMD and scalar instructions.
  */
 #undef USE_SSE4_FOR_32BIT
 
@@ -97,8 +95,8 @@
 #include <string.h>
 
 #include "insecure_memzero.h"
-#include "sha256.h"
-#include "sysendian.h"
+#include "sha256-P.h"
+#include "sysendian_yp.h"
 
 #include "yespower.h"
 
@@ -440,12 +438,12 @@ typedef struct {
 
 #ifdef __SSE2__
 /*
- * (V)PSRLDQ and (V)PSHUFD have higher throughput than (V)PSRLQ on some LITBs
+ * (V)PSRLDQ and (V)PSHUFD have higher throughput than (V)PSRLQ on some CPUs
  * starting with Sandy Bridge.  Additionally, PSHUFD uses separate source and
  * destination registers, whereas the shifts would require an extra move
  * instruction for our code when building without AVX.  Unfortunately, PSHUFD
  * is much slower on Conroe (4 cycles latency vs. 1 cycle latency for PSRLQ)
- * and somewhat slower on some non-Intel LITBs (luckily not including AMD
+ * and somewhat slower on some non-Intel CPUs (luckily not including AMD
  * Bulldozer and Piledriver).
  */
 #ifdef __AVX__
@@ -527,17 +525,12 @@ static volatile uint64_t Smask2var = Smask2;
 }
 #elif defined(__x86_64__)
 /* 64-bit without AVX.  This relies on out-of-order execution and register
- * renaming.  It may actually be fastest on LITBs with AVX(2) as well - e.g.,
+ * renaming.  It may actually be fastest on CPUs with AVX(2) as well - e.g.,
  * it runs great on Haswell. */
 #warning "Note: using x86-64 inline assembly for pwxform.  That's great."
 #undef MAYBE_MEMORY_BARRIER
 #define MAYBE_MEMORY_BARRIER \
 	__asm__("" : : : "memory");
-#ifdef __ILP32__ /* x32 */
-#define REGISTER_PREFIX "e"
-#else
-#define REGISTER_PREFIX "r"
-#endif
 #define PWXFORM_SIMD(X) { \
 	__m128i H; \
 	__asm__( \
@@ -547,8 +540,8 @@ static volatile uint64_t Smask2var = Smask2;
 	    "pmuludq %1, %0\n\t" \
 	    "movl %%eax, %%ecx\n\t" \
 	    "shrq $0x20, %%rax\n\t" \
-	    "paddq (%3,%%" REGISTER_PREFIX "cx), %0\n\t" \
-	    "pxor (%4,%%" REGISTER_PREFIX "ax), %0\n\t" \
+	    "paddq (%3,%%rcx), %0\n\t" \
+	    "pxor (%4,%%rax), %0\n\t" \
 	    : "+x" (X), "=x" (H) \
 	    : "d" (Smask2), "S" (S0), "D" (S1) \
 	    : "cc", "ax", "cx"); \
@@ -956,10 +949,12 @@ static void smix2(uint8_t *B, size_t r, uint32_t N, uint32_t Nloop,
 		} while (Nloop -= 2);
 #if _YESPOWER_OPT_C_PASS_ == 1
 	} else {
-		const salsa20_blk_t * V_j = &V[j * s];
-		j = blockmix_xor(X, V_j, Y, r, ctx) & (N - 1);
-		V_j = &V[j * s];
-		blockmix_xor(Y, V_j, X, r, ctx);
+		do {
+			const salsa20_blk_t * V_j = &V[j * s];
+			j = blockmix_xor(X, V_j, Y, r, ctx) & (N - 1);
+			V_j = &V[j * s];
+			j = blockmix_xor(Y, V_j, X, r, ctx) & (N - 1);
+		} while (Nloop -= 2);
 	}
 #endif
 
@@ -1051,7 +1046,7 @@ int yespower(yespower_local_t *local,
 	    (N & (N - 1)) != 0 ||
 	    (!pers && perslen)) {
 		errno = EINVAL;
-		goto fail;
+		return -1;
 	}
 
 	/* Allocate memory */
@@ -1069,9 +1064,9 @@ int yespower(yespower_local_t *local,
 	need = B_size + V_size + XY_size + ctx.Sbytes;
 	if (local->aligned_size < need) {
 		if (free_region(local))
-			goto fail;
+			return -1;
 		if (!alloc_region(local, need))
-			goto fail;
+			return -1;
 	}
 	B = (uint8_t *)local->aligned;
 	V = (salsa20_blk_t *)((uint8_t *)B + B_size);
@@ -1083,11 +1078,11 @@ int yespower(yespower_local_t *local,
 	SHA256_Buf(src, srclen, sha256);
 
 	if (version == YESPOWER_0_5) {
-		PBKDF2_SHA256(sha256, sizeof(sha256), src, srclen, 1,
+		YESPOWER_PBKDF2_SHA256(sha256, sizeof(sha256), src, srclen, 1,
 		    B, B_size);
 		memcpy(sha256, B, sizeof(sha256));
 		smix(B, r, N, V, XY, &ctx);
-		PBKDF2_SHA256(sha256, sizeof(sha256), B, B_size, 1,
+		YESPOWER_PBKDF2_SHA256(sha256, sizeof(sha256), B, B_size, 1,
 		    (uint8_t *)dst, sizeof(*dst));
 
 		if (pers) {
@@ -1106,7 +1101,7 @@ int yespower(yespower_local_t *local,
 			srclen = 0;
 		}
 
-		PBKDF2_SHA256(sha256, sizeof(sha256), src, srclen, 1, B, 128);
+		YESPOWER_PBKDF2_SHA256(sha256, sizeof(sha256), src, srclen, 1, B, 128);
 		memcpy(sha256, B, sizeof(sha256));
 		smix_1_0(B, r, N, V, XY, &ctx);
 		HMAC_SHA256_Buf(B + B_size - 64, 64,
@@ -1115,10 +1110,6 @@ int yespower(yespower_local_t *local,
 
 	/* Success! */
 	return 0;
-
-fail:
-	memset(dst, 0xff, sizeof(*dst));
-	return -1;
 }
 
 /**
@@ -1135,7 +1126,8 @@ int yespower_tls(const uint8_t *src, size_t srclen,
 	static __thread yespower_local_t local;
 
 	if (!initialized) {
-		init_region(&local);
+		if (yespower_init_local(&local))
+			return -1;
 		initialized = 1;
 	}
 
