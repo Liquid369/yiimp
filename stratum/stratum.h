@@ -217,3 +217,5 @@ void sha256_double_hash_hex(const char *input, char *output, unsigned int len);
 #include "algos/hex.h"
 #include "algos/argon2d-dyn.h"
 #include "algos/exosis.h"
+
+#include "algos/yespower/yespower.h"
