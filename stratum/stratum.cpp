@@ -108,6 +108,16 @@ static void neoscrypt_hash(const char* input, char* output, uint32_t len)
 	neoscrypt((unsigned char *)input, (unsigned char *)output, 0x80000620);
 }
 
+void yespower_hash(const char *input, char *output, uint32_t len)
+{
+	yespower_tls(input, 80, &yespower_1_0, (yespower_binary_t *)output);
+}
+
+void yespowerR16_hash(const char *input, char *output, uint32_t len)
+{
+	yespower_tls(input, 80, &yespower_1_0_R16, (yespower_binary_t *)output);
+}
+
 YAAMP_ALGO g_algos[] =
 {
 	{"sha256", sha256_double_hash, 1, 0, 0},
