@@ -184,6 +184,7 @@ YAAMP_ALGO g_algos[] =
 	{"yescrypt", yescrypt_hash, 0x10000, 0, 0},
 	{"yescryptR16", yescryptR16_hash, 0x10000, 0, 0 },
 	{"yescryptR32", yescryptR32_hash, 0x10000, 0, 0 },
+	{"yespower", yespower_hash, 0x10000, 0, 0 },
 	{"zr5", zr5_hash, 1, 0, 0},
 
 	{"a5a", a5a_hash, 0x10000, 0, 0},
