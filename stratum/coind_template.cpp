@@ -307,6 +307,7 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
 	strcpy(templ->prevhash_hex, prev ? prev : "");
 	const char *flags = json_get_string(json_coinbaseaux, "flags");
 	strcpy(templ->flags, flags ? flags : "");
+	strcpy(templ->priceinfo, "");
 
 	// LBC Claim Tree (with wallet gbt patch)
 	const char *claim = json_get_string(json_result, "claimtrie");
@@ -330,6 +331,13 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
 		if (claim) {
 			strcpy(templ->claim_hex, claim);
 			debuglog("claim_hex: %s\n", templ->claim_hex);
+		}
+	}
+	else if (strcmp(coind->symbol, "BITC") == 0) {
+		if (strlen(json_get_string(json_result, "priceinfo")) < 1000) {
+			templ->needpriceinfo = json_get_bool(json_result, "needpriceinfo");
+            if (templ->needpriceinfo)
+				strcpy(templ->priceinfo, json_get_string(json_result, "priceinfo"));
 		}
 	}
 

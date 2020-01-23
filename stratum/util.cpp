@@ -479,6 +479,26 @@ void ser_number(int n, char *a)
 //	printf("ser_number %d, %s\n", n, a);
 }
 
+void ser_compactsize(uint64_t nSize, char *a)
+{
+	if (nSize < 253)
+	{
+		sprintf(a, "%02lx", nSize);
+	}
+	else if (nSize <= (unsigned short)-1)
+	{
+		sprintf(a, "%02x%04lx", 253, nSize);
+	}
+	else if (nSize <= (unsigned int)-1)
+	{
+		sprintf(a, "%02x%08lx", 254, nSize);
+	}
+	else
+	{
+		sprintf(a, "%02x%016lx", 255, nSize);
+	}
+}
+
 void ser_string_be(const char *input, char *output, int len)
 {
 	for(int i=0; i<len; i++)
@@ -556,6 +576,31 @@ uint64_t decode_compact(const char *input)
 //
 //	debuglog("decode_compact %s -> %016llx\n", input, v);
 	return v;
+}
+
+uint64_t sharetotarg(double diff)
+{
+        int i, shift = 29;
+        unsigned char targ[32];
+        for (i=0; i<32; i++)
+            targ[i]=0;
+        double ftarg = (double)0x0000ffff / diff;
+        while (ftarg < (double)0x00008000) {
+            shift--;
+            ftarg *= 256.0;
+        }
+        while (ftarg >= (double)0x00800000) {
+            shift++;
+            ftarg /= 256.0;
+        }
+        uint32_t nBits = (int)ftarg + (shift << 24);
+        shift = (nBits >> 24) & 0x00ff;
+        nBits &= 0x00FFFFFF;
+        targ[shift - 1] = nBits >> 16;
+        targ[shift - 2] = nBits >> 8;
+        targ[shift - 3] = nBits;
+        uint64_t starget = * (uint64_t *) &targ[24];
+        return (starget);
 }
 
 //def uint256_from_compact(c):
