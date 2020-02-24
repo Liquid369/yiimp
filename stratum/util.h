@@ -101,6 +101,7 @@ uint64_t sharetotarg(double diff);
 
 uint64_t diff_to_target(double difficulty);
 double target_to_diff(uint64_t target);
+uint64_t share_to_target(double diff);
 
 uint64_t get_hash_difficulty(unsigned char *input);
 
