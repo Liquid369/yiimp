@@ -31,7 +31,7 @@ echo <<<end
 <br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br><br>
+//<br><br><br><br><br><br><br><br><br><br>
 </div>
 
 <br><a href='/site/create'><img width=16 src=''><b>CREATE COIN</b></a>

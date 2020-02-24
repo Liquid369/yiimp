@@ -33,7 +33,7 @@ $payout_freq = (YAAMP_PAYMENTS_FREQ / 3600)." hours";
 
 <ul>
 
-<li>YiiMP is a pool management solution based on the Yii Framework.</li>
+<li>ScryptPool is a pool management solution based on the Yii Framework.</li>
 <li>This fork was based on the yaamp source code and is now an open source project.</li>
 <li>No registration is required, we do payouts in the currency you mine. Use your wallet address as the username.</li>
 <li>&nbsp;</li>
@@ -56,7 +56,7 @@ $payout_freq = (YAAMP_PAYMENTS_FREQ / 3600)." hours";
 <ul>
 
 <li>
-<p class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
+<p class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #444444; font-family: monospace;'>
 	-o stratum+tcp://<?= YAAMP_STRATUM_URL ?>:&lt;PORT&gt; -u &lt;WALLET_ADDRESS&gt; [-p &lt;OPTIONS&gt;]</p>
 </li>
 
@@ -65,7 +65,7 @@ $payout_freq = (YAAMP_PAYMENTS_FREQ / 3600)." hours";
 <?php else: ?>
 <li>&lt;WALLET_ADDRESS&gt; should be valid for the currency you mine. <b>DO NOT USE a BTC address here, the auto exchange is disabled</b>!</li>
 <?php endif; ?>
-<li>As optional password, you can use <b>-p c=&lt;SYMBOL&gt;</b> if yiimp does not set the currency correctly on the Wallet page.</li>
+<li>As optional password, you can use <b>-p c=&lt;SYMBOL&gt;</b> if ScryptIt does not set the currency correctly on the Wallet page.</li>
 <li>See the "Pool Status" area on the right for PORT numbers. Algorithms without associated coins are disabled.</li>
 
 <br>

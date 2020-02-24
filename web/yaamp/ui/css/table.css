@@ -3,7 +3,7 @@ table.dataGrid
 {
 	border-collapse: collapse;
 	width: 100%;
-	color: #555;
+	color: #fff;
 }
 
 table.dataGrid a, table.dataGrid a:visited
@@ -19,7 +19,7 @@ table.dataGrid th, table.dataGrid td
 table.dataGrid th
 {
 	border-bottom: 1px solid #eee;
-	background-color: #eee;
+	background-color: #bbb;
 	/*color: #555;*/
 }
 
@@ -50,7 +50,7 @@ table.dataGrid2
 {
 	border-collapse: collapse;
 	width: 100%;
-	color: #555;
+	color: #fff;
 }
 
 /*table.dataGrid2 a, table.dataGrid2 a:visited
@@ -133,11 +133,11 @@ table.reportgrid1 tr.bold
 
 .ssrow:hover
 {
-	background-color: #e3f0f8;
+	background-color: #7c888f;
 }
 
 .ssselected
 {
-	background-color: #d3e0e8;
+	background-color: #6b7f8c;
 }
 

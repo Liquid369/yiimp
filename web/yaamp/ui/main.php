@@ -141,7 +141,8 @@ function showPageFooter()
 	$year = date("Y", time());
 
 	echo "<p>&copy; $year ".YAAMP_SITE_NAME.' - '.
-		'<a href="http://github.com/tpruvot/yiimp">Open source Project</a></p>';
+		'<a href="http://github.com/tpruvot/yiimp">Open source Project</a></p>'.
+		"<p>For support email:  support@scryptpool.xyz";
 
 	echo '</div><!-- footer -->';
 }

@@ -193,7 +193,7 @@ void db_update_coinds(YAAMP_DB *db)
 	db_query(db, "SELECT id, name, rpchost, rpcport, rpcuser, rpcpasswd, rpcencoding, master_wallet, reward, price, "
 		"hassubmitblock, txmessage, enable, auto_ready, algo, pool_ttf, charity_address, charity_amount, charity_percent, "
 		"reward_mul, symbol, auxpow, actual_ttf, network_ttf, usememorypool, hasmasternodes, algo, symbol2, "
-		"rpccurl, rpcssl, rpccert, account, multialgos, max_miners, max_shares, usesegwit "
+		"rpccurl, rpcssl, rpccert, account, multialgos, max_miners, max_shares, usesegwit, usesbech32 "
 		"FROM coins WHERE enable AND auto_ready AND algo='%s' ORDER BY index_avg", g_stratum_algo);
 
 	MYSQL_RES *result = mysql_store_result(&db->mysql);

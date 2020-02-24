@@ -9,7 +9,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
 	<meta name="description" content="yiimp mining pool for bitcoin and altcoin with auto profit switch and auto exchange">
-	<meta name="keywords" content="yiimp,anonymous,mining,pool,maxcoin,bitcoin,altcoin,auto,switch,exchange,profit">
+	<meta name="keywords" content="yiimp,anonymous,mining,pool,maxcoin,bitcoin,altcoin,auto,switch,exchange,profit,scriptit,scryptpool,scrypt">
 
 <?php
 	

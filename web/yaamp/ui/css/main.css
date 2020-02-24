@@ -8,8 +8,8 @@
 body
 {
 	font: normal 10pt Arial,Helvetica,sans-serif;
-	background-color: white;
-	color: #444;
+	background-color: #444444;
+	color: #fff;
 	text-align: left;
 	margin: 0;
 	padding: 0;
@@ -170,7 +170,7 @@ hr
 .main-left-title
 {
 	padding: 8px;
-	background-color: #e5e5e5;
+	background-color: #444444;
 	font-weight: bold;
 }
 

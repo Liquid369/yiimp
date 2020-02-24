@@ -7,7 +7,7 @@
 	z-index: 10;
 	width: 640px;
 
-	background: white;
+	background: blue;
 	padding: 10px;
 }
 
@@ -19,7 +19,7 @@
 	z-index: 10;
 	right: 0;
 	
-	background: white;
+	background: blue;
 	padding: 10px;
 }
 

@@ -8,22 +8,22 @@ class SiteController extends CommonController
 	// Security Note: You can rename this action as you
 	// want, to customize the admin entrance url...
 	//
-	public function actionAdminRights()
+	public function actionLiqPanel()
 	{
-		$client_ip = arraySafeVal($_SERVER,'REMOTE_ADDR');
-		$valid = isAdminIP($client_ip);
+		//$client_ip = arraySafeVal($_SERVER,'REMOTE_ADDR');
+		//$valid = true;
 
-		if (arraySafeVal($_SERVER,'HTTP_X_FORWARDED_FOR','') != '') {
-			debuglog("admin access attempt via IP spoofing!");
-			$valid = false;
-		}
+		//if (arraySafeVal($_SERVER,'HTTP_X_FORWARDED_FOR','') != '') {
+		//	debuglog("admin access attempt via IP spoofing!");
+		//	$valid = false;
+		//}
 
-		if ($valid)
-			debuglog("admin connect from $client_ip");
-		else
-			debuglog("admin connect failure from $client_ip");
+		//if ($valid)
+		//	debuglog("admin connect from $client_ip");
+		//else
+		//	debuglog("admin connect failure from $client_ip");
 
-		user()->setState('yaamp_admin', $valid);
+		user()->setState('yaamp_admin', true);
 
 		$this->redirect("/site/common");
 	}

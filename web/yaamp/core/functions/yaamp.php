@@ -323,7 +323,7 @@ function getAlgoPort($algo)
 		'yescryptR16'	=> 6333,
 		'yescryptR32'	=> 6343,
 		'yespower'	=> 6353,
-		'yespowerLITB'  => 6235,
+		'yespowerLITB'  => 8301,
 		'yespowerSUGAR' => 6236,
 		'yespowerR8'	=> 6363,
 		'yespowerR16'	=> 6373,
