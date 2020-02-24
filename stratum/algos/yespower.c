@@ -38,9 +38,10 @@ static const yespower_params_t yespower_1_0_SUGAR = {
 // solardiz recommended yespower 1.0 settings of at least N=2048 r=32 (8 MiB)
 static const yespower_params_t yespower_1_0 = {YESPOWER_1_0, 2048, 32, NULL, 0};
 
-void yespowerSUGAR_hash(const char *input, char *output, uint32_t len)
-{
-        yespower_tls(input, len, &yespower_1_0_SUGAR, (yespower_binary_t*)output);
+void yespowerSUGAR_hash(const char *input, char *output, uint32_t len) {
+	if ( yespower_tls(input, len, &yespower_1_0_SUGAR, (yespower_binary_t*)output ) ) {
+    abort();
+  }
 }
 
 void yespowerLITB_hash(const char *input, char *output, uint32_t len)

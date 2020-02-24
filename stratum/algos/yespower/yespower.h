@@ -55,7 +55,7 @@ typedef yespower_region_t yespower_local_t;
  * Type for yespower algorithm version numbers.
  */
 typedef enum { YESPOWER_0_5 = 5, YESPOWER_1_0 = 10 } yespower_version_t;
-
+//int yespower_hash(const char *input, char *output)
 /**
  * yespower parameters combined into one struct.
  */
@@ -75,7 +75,7 @@ typedef struct {
 
 /**
  * yespower_init_local(local):
- * Initialize the thread-local (RAM) data structure.  Actual memory allocation
+// * Initialize the thread-local (RAM) data structure.  Actual memory allocation
  * is currently fully postponed until a call to yespower().
  *
  * Return 0 on success; or -1 on error.

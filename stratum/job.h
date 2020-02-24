@@ -1,4 +1,3 @@
-
 #define MAX_AUXS	32
 
 class YAAMP_REMOTE;

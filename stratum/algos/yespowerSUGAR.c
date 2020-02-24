@@ -1,4 +1,5 @@
-#include "yespower-opt.c"
+#include "yespower-1.0.1/yespower-opt.c"
+#include "yespower-1.0.1/yespower.h"
 
 static const yespower_params_t yespower_1_0_SUGAR = {
 	.version = YESPOWER_1_0,
@@ -8,7 +9,6 @@ static const yespower_params_t yespower_1_0_SUGAR = {
 	.perslen = 74
 };
 
-void yespowerSUGAR_hash(const char *input, char *output, uint32_t len)
-{
-	yespower_tls(input, len, &yespower_1_0_SUGAR, (yespower_binary_t*)output);
+void yespowerSUGAR_hash(const char *input, char *output, uint32_t len) {
+	yespower_tls(input, len, &yespower_1_0_SUGAR, output );
 }
