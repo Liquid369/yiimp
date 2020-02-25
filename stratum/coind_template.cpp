@@ -589,7 +589,6 @@ bool coind_create_job(YAAMP_COIND *coind, bool force)
 	sprintf(coind->job->name, "%s", coind->symbol);
 
 	coind->job->id = job_get_jobid();
-	templ->clean_jobs = job_state;
 	coind->job->templ = templ;
 
 
