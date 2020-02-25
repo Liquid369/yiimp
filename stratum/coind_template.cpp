@@ -518,7 +518,6 @@ bool coind_create_job(YAAMP_COIND *coind, bool force)
 	bool b = rpc_connected(&coind->rpc);
 	if(!b) return false;
 
-	auto* job_last = coind->job;
 	CommonLock(&coind->mutex);
 
 	YAAMP_JOB_TEMPLATE *templ;
@@ -538,14 +537,8 @@ bool coind_create_job(YAAMP_COIND *coind, bool force)
 	}
 
 	YAAMP_JOB *job_last = coind->job;
-	bool job_state = true;
 
-	if( job_last && job_last->templ &&
-		templ->height == job_last->templ->height)
-		job_state = false;
-
-	coind->lastjobcreated = static_cast<int>(time(nullptr));
-	/*if(	!force && job_last && job_last->templ && job_last->templ->created + 45 > time(NULL) &&
+	if(	!force && job_last && job_last->templ && job_last->templ->created + 45 > time(NULL) &&
 		templ->height == job_last->templ->height &&
 		templ->txcount == job_last->templ->txcount &&
 		strcmp(templ->coinb2, job_last->templ->coinb2) == 0)
@@ -559,7 +552,7 @@ bool coind_create_job(YAAMP_COIND *coind, bool force)
 
 		CommonUnlock(&coind->mutex);
 		return true;
-	}*/
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////
 
